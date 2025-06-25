@@ -64,13 +64,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.51.0  # latest stable version
         with:
           scan-type: fs
+          vulnerability-type: library           # ensures pnpm/yarn/npm deps are scanned
           ignore-unfixed: true
+          severity: CRITICAL,HIGH,MEDIUM        # broaden coverage
           format: sarif
           output: trivy-results.sarif
-          severity: CRITICAL,HIGH
       - name: Upload Trivy SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
