@@ -46,22 +46,21 @@ jobs:
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
-sonarcloud:
-  name: SonarCloud Quality Gate
-  runs-on: ubuntu-latest
-  env:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+  sonarcloud:
+    name: SonarCloud Quality Gate
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Run SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      with:
-        args: >
-          -Dsonar.organization=your-org-key
-          -Dsonar.projectKey=your-project-key
-
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.organization=your-org-key
+            -Dsonar.projectKey=your-project-key
 
   trivy:
     name: Trivy Vulnerability Scan
