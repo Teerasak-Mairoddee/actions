@@ -25,7 +25,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: javascript        
+          languages: javascript
       - name: Autobuild project
         uses: github/codeql-action/autobuild@v3
       - name: Analyze code with CodeQL
@@ -64,12 +64,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.12.0  
+        uses: aquasecurity/trivy-action@0.12.0
         with:
+          image-ref: ghcr.io/aquasecurity/trivy:0.51.3  
           scan-type: fs
-          vuln-type: os,library           
+          vuln-type: os,library
           ignore-unfixed: true
-          severity: CRITICAL,HIGH,MEDIUM
+          severity: CRITICAL,HIGH,MEDIUM,LOW           
           format: sarif
           output: trivy-results.sarif
       - name: Upload Trivy SARIF to GitHub Security tab
