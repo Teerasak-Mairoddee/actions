@@ -48,7 +48,7 @@ On **June 25, 2025**, I committed multiple deliberate vulnerabilities:
 - Every **push** and **pull request** to `main`
 - Weekly via **cron job** (scheduled automation)
 
-### 🛠 Jobs in the Pipeline
+### Jobs in the Pipeline
 
 | Tool         | Role                                         | Outcome                                                  |
 |--------------|----------------------------------------------|-----------------------------------------------------------|
