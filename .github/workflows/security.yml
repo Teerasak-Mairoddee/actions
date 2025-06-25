@@ -59,8 +59,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.organization=your-org-key
-            -Dsonar.projectKey=your-project-key
+            -Dsonar.organization=Teerasak-Mairoddee
+            -Dsonar.projectKey=Teerasak-Mairoddee_actions
 
   trivy:
     name: Trivy Vulnerability Scan
