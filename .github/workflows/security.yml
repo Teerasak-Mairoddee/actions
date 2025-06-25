@@ -1,0 +1,54 @@
+# .github/workflows/security.yml
+name: security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '15 3 * * 1'   # weekly Monday scan
+
+permissions:
+  contents: read
+  security-events: write   # needed for SARIF uploads
+  id-token: write          # OIDC for third-party tools
+
+jobs:
+
+  codeql:
+    uses: github/codeql-action/analysis@v3   # init, autobuild, analyze
+
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+  sonarcloud:
+    needs: codeql         # optional—remove if no licence
+    uses: SonarSource/sonarcloud-github-action@v2
+    secrets: inherit
+
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy repo scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+  dependabot:
+    if: ${{ github.event_name == 'schedule' }}   # weekly update run
+    uses: dependabot/fetch-metadata@v2
