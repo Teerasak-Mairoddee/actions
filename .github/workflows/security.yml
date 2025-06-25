@@ -10,8 +10,8 @@ on:
 
 permissions:
   contents: read
-  security-events: write  # Required for SARIF uploads
-  id-token: write         # Needed for some tools like Trivy with OIDC
+  security-events: write  # Needed for SARIF uploads
+  id-token: write         # Needed for Trivy OIDC downloads
   actions: read
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: javascript  # Adjust for your repo
+          languages: javascript            # update if you add more languages
       - name: Autobuild project
         uses: github/codeql-action/autobuild@v3
       - name: Analyze code with CodeQL
@@ -64,12 +64,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.51.0  # latest stable version
+        uses: aquasecurity/trivy-action@0.12.0   # current stable release tag
         with:
           scan-type: fs
-          vulnerability-type: library           # ensures pnpm/yarn/npm deps are scanned
+          vulnerability-type: library            # scans lock-files for deps
           ignore-unfixed: true
-          severity: CRITICAL,HIGH,MEDIUM        # broaden coverage
+          severity: CRITICAL,HIGH,MEDIUM         # include Medium for tests
           format: sarif
           output: trivy-results.sarif
       - name: Upload Trivy SARIF to GitHub Security tab
