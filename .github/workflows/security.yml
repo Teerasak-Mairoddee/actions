@@ -80,18 +80,4 @@ jobs:
       - name: Notify n8n workflow
         if: always()
         run: |
-          curl -s -o /dev/null -w "n8n webhook responded with HTTP %{http_code}\n" \
-            -X POST "https://teerasak-mairoddee.app.n8n.cloud/webhook-test/scan-complete" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "scan_url": "https://github.com/${{ github.repository }}/security/code-scanning",
-              "project": "${{ github.repository }}"
-            }'
-
-  dependabot:
-    name: Dependabot Metadata
-    if: ${{ github.event_name == 'schedule' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fetch Dependabot metadata
-        uses: dependabot/fetch-metadata@v2
+          curl -s -o /dev/null -w "n8n we
