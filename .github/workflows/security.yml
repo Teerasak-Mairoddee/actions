@@ -63,7 +63,7 @@ jobs:
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@0.12.0
         with:
-          image-ref: ghcr.io/aquasecurity/trivy:0.51.3
+          image-ref: ghcr.io/aquasecurity/trivy:0.51.3   # newer CLI
           scan-type: fs
           vuln-type: os,library
           ignore-unfixed: true
@@ -80,9 +80,11 @@ jobs:
       - name: Notify n8n workflow
         if: always()
         run: |
-          curl -s -o /dev/null -w "n8n webhook responded with HTTP %{http_code}\n" -X POST "https://teerasak-mairoddee.app.n8n.cloud/webhook/scan-complete" \
-            -H "Content-Type: application/json" \
-            -d "{\"scan_url\": \"https://github.com/${{ github.repository }}/security/code-scanning\", \"project\": \"${{ github.repository }}\"}"
+          curl -s -o /dev/null \
+               -w "n8n webhook responded with HTTP %{http_code}\n" \
+               -X POST "https://teerasak-mairoddee.app.n8n.cloud/webhook-test/scan-complete" \
+               -H "Content-Type: application/json" \
+               -d "{\"scan_url\":\"https://github.com/${{ github.repository }}/security/code-scanning\",\"project\":\"${{ github.repository }}\"}"
 
   dependabot:
     name: Dependabot Metadata
